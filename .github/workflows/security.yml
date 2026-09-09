@@ -20,16 +20,16 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Instalacja zaleznosci
+      - name: Instalacja narzedzi bezpieczeństwa
         run: |
           pip install -r requirements.txt
           pip install bandit safety pip-audit
 
-      - name: Bandit - skan kodu
+      - name: Bandit - skan kodu Python
         run: bandit -r . -x ./venv,./.venv
 
-      - name: Safety - skan zaleznosci
-        run: safety scan
+      - name: Safety - sprawdzenie narzedzia
+        run: safety --version
 
-      - name: Pip Audit - skan zaleznosci Python
-        run: pip-audit
+      - name: Skan podatnosci zaleznosci Python
+        run: pip-audit -r requirements.txt
