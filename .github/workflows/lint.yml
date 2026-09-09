@@ -1,0 +1,31 @@
+name: Lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pobranie kodu
+        uses: actions/checkout@v4
+
+      - name: Instalacja Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Instalacja zaleznosci
+        run: pip install -r requirements.txt
+
+      - name: Flake8
+        run: flake8 . --exclude=venv,migrations --max-line-length=100
+
+      - name: Black
+        run: black --check .
+
+      - name: Isort
+        run: isort --check-only .
