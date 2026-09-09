@@ -1,0 +1,35 @@
+name: Security
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pobranie kodu
+        uses: actions/checkout@v4
+
+      - name: Instalacja Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Instalacja zaleznosci
+        run: |
+          pip install -r requirements.txt
+          pip install bandit safety pip-audit
+
+      - name: Bandit - skan kodu
+        run: bandit -r . -x ./venv,./.venv
+
+      - name: Safety - skan zaleznosci
+        run: safety scan
+
+      - name: Pip Audit - skan zaleznosci Python
+        run: pip-audit
